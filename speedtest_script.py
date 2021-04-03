@@ -30,23 +30,35 @@ def save_results(logfile, dspeed, uspeed, ping, timestamp):
             myfile.write(header)
         myfile.write(str(timestamp) + '\t' + str(dspeed) + '\t' + str(uspeed) + '\t' + str(ping) + str('\n'))
         
-def run_tests(logfile):
+def run_tests(logfile, time_diff):
     print('Starting logging tests to file: ' + logfile)
     start_time = time.time()
-    while True:
-        print('Executing test...')
-        result_dict = execute_test()
-        print('Finished executing test')
-        dspeed, uspeed, ping, timestamp = get_test_results(result_dict)
-        save_results(logfile, dspeed, uspeed, ping, timestamp)
-        time.sleep(60.0 - ((time.time() - start_time) % 60.0))
+    try:
+        while True:
+            print('Executing test...')
+            result_dict = execute_test()
+            print('Finished executing test')
+            dspeed, uspeed, ping, timestamp = get_test_results(result_dict)
+            save_results(logfile, dspeed, uspeed, ping, timestamp)
+            time.sleep(time_diff - ((time.time() - start_time) % time_diff))
+    except KeyboardInterrupt:
+        print('\nExiting now...')
+        sys.exit()
 
-if len(sys.argv) > 2:
-    print('You only need one parameter: the logfile\'s name (optional, default is default.log')
+if len(sys.argv) > 3:
+    print('You only need two parameter: the logfile\'s name (optional, default is default.log), and the time difference between tests in seconds (default is 60 s, must be at least 60 s)')
     sys.exit()
-elif len(sys.argv) == 2:
+if len(sys.argv) > 1:
     logfile = sys.argv[1]
 else:
     logfile = 'default.log'
 
-run_tests(logfile)
+if len(sys.argv) > 2:
+    time_diff = float(sys.argv[2])
+    if time_diff < 60.0:
+        print('The minimum time difference must be at least 60 s, setting time differece to 60 s!')
+        time_diff = 60.0
+else:
+    time_diff = 60.0
+
+run_tests(logfile, time_diff)
