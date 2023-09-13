@@ -8,13 +8,13 @@ This Python script allows you to measure and log your internet speed using the S
 
 2. Install the required Python packages using pip:
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 ## Usage
 
 You can run the script from the command line with the following options:
 
-python speedtest_logger.py [--logfile LOGFILE] [--timediff TIMEDIFF] [--measurements MEASUREMENTS]
+`python speedtest_logger.py [--logfile LOGFILE] [--timediff TIMEDIFF] [--measurements MEASUREMENTS]`
 
 - `--logfile` (optional): The file in which to log internet speed measurements (default: default.log).
 - `--timediff` (optional): Minimum time difference between measurements in seconds (default: 60 seconds).
@@ -22,7 +22,7 @@ python speedtest_logger.py [--logfile LOGFILE] [--timediff TIMEDIFF] [--measurem
 
 Example usage:
 
-python speedtest_logger.py --logfile my_speed_log.tsv --timediff 120 --measurements 10
+`python speedtest_logger.py --logfile my_speed_log.tsv --timediff 120 --measurements 10`
 
 
 ## Output
