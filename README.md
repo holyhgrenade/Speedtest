@@ -16,7 +16,7 @@ You can run the script from the command line with the following options:
 
 `python speedtest_logger.py [--logfile LOGFILE] [--timediff TIMEDIFF] [--measurements MEASUREMENTS]`
 
-- `--logfile` (optional): The file in which to log internet speed measurements (default: default.log).
+- `--logfile` (optional): The file in which to log internet speed measurements in tsv format (default: default.tsv).
 - `--timediff` (optional): Minimum time difference between measurements in seconds (default: 60 seconds).
 - `--measurements` (optional): Number of measurements to take (default: 5).
 
