@@ -3,18 +3,29 @@ import time
 import argparse
 import sys
 
-def execute_test():
-    st = speedtest.Speedtest(secure = True)
-    st.get_best_server()
+def execute_speedtest():
+    try:
+        st = speedtest.Speedtest(secure = True)
+        st.get_best_server()
 
-    download_speed = st.download() / 1_000_000  # Convert to Mbps
-    upload_speed = st.upload() / 1_000_000  # Convert to Mbps
-    ping = st.results.ping
-    return (download_speed, upload_speed, ping)
+        download_speed = st.download() / 1_000_000  # Convert to Mbps
+        upload_speed = st.upload() / 1_000_000  # Convert to Mbps
+        ping = st.results.ping
+        return (download_speed, upload_speed, ping)
+    except Exception as e:
+        print(f"An exception occurred during speedtest: {e}")
+        return (0, 0, None)
+
+def execute_log_test(log_file):
+    download_speed, upload_speed, ping = execute_speedtest()
+    timestamp = time.strftime("%Y-%m-%d_%H:%M:%S")
+    log_line = f"{timestamp}\t{download_speed:.2f}\t{upload_speed:.2f}\t{ping}\n"
+    log_file.write(log_line)
+    print(f"Measurement at {timestamp}: Download: {download_speed:.2f} Mbps, Upload: {upload_speed:.2f} Mbps, Ping: {ping} ms")
 
 def measure_speed(logfile, timediff, measurements):
     if timediff <= 0:
-        print("Error: 'timediff' must be a positive integer.")
+        print("Error: 'timediff' must be a positive number.")
         return
 
     if measurements <= 0:
@@ -26,20 +37,13 @@ def measure_speed(logfile, timediff, measurements):
 
         for i in range(measurements):
             start_time = time.time()
-            
-            download_speed, upload_speed, ping = execute_test()
-            
-            timestamp = time.strftime("%Y-%m-%d_%H:%M:%S")
-            
-            log_line = f"{timestamp}\t{download_speed:.2f}\t{upload_speed:.2f}\t{ping}\n"
-            log_file.write(log_line)
 
-            print(f"Measurement at {timestamp}: Download: {download_speed:.2f} Mbps, Upload: {upload_speed:.2f} Mbps, Ping: {ping} ms")
-            
+            execute_log_test(log_file)
+
             if i < measurements - 1:
-            	end_time = time.time()
-            	sleep_time = timediff - ( (end_time - start_time) % timediff )
-            	time.sleep(sleep_time)
+                end_time = time.time()
+                sleep_time = timediff - ( (end_time - start_time) % timediff )
+                time.sleep(sleep_time)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Measure and log internet speed.")
