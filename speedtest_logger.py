@@ -14,7 +14,7 @@ def execute_speedtest():
         return (download_speed, upload_speed, ping)
     except Exception as e:
         print(f"An exception occurred during speedtest: {e}")
-        return (0, 0, None)
+        return (0, 0, None) # Default values, in case of exception
 
 def execute_log_test(log_file):
     download_speed, upload_speed, ping = execute_speedtest()
@@ -42,6 +42,8 @@ def measure_speed(logfile, timediff, measurements):
 
             if i < measurements - 1:
                 end_time = time.time()
+                # Difference % timediff is used to guarantee \
+                # whole steps of timediff
                 sleep_time = timediff - ( (end_time - start_time) % timediff )
                 time.sleep(sleep_time)
 
