@@ -49,7 +49,7 @@ def measure_speed(logfile, timediff, measurements):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Measure and log internet speed.")
-    parser.add_argument("--logfile", default="default.log", help="File to log internet speed measurements (default: default.log)")
+    parser.add_argument("--logfile", default="default.tsv", help="File to log internet speed measurements (default: default.tsv)")
     parser.add_argument("--timediff", type=int, default=60, help="Minimum time difference between measurements in seconds (default: 60)")
     parser.add_argument("--measurements", type=int, default=5, help="Number of measurements to take")
     
